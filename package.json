@@ -1,0 +1,13 @@
+{
+  "name": "@veppagunta-3e04c8a7-fdc2-4182-bde1-2f1fe496aee6/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "22.3.3",
+    "@nx/workspace": "22.3.3",
+    "nx": "22.3.3"
+  }
+}
