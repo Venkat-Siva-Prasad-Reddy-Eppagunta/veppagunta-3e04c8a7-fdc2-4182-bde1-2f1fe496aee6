@@ -7,6 +7,8 @@ import { Organization } from './entities/organization.entity';
 import { Task } from './entities/task.entity';
 import { User } from './entities/user.entity';
 import { SeedService } from './seed.service';
+import { AuditService } from './audit.service';
+import { RbacDemoController } from './rbac/rbac-demo.controller';
 
 
 @Module({
@@ -21,7 +23,8 @@ import { SeedService } from './seed.service';
     TypeOrmModule.forFeature([Organization, User, Task, AuditLog]),
     AuthModule,
   ],
-  providers: [SeedService],
+  controllers:[RbacDemoController],
+  providers: [SeedService, AuditService],
 })
 
 export class AppModule {}
