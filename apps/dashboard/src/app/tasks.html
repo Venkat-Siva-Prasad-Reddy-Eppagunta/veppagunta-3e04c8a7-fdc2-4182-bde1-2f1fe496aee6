@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50 p-4">
+    <div class="mx-auto max-w-3xl space-y-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-semibold">Tasks</h1>
+            <button class="rounded-lg border bg-white px-3 py-2 text-sm" (click)="logout()">Logout</button>
+        </div>
+
+        <div *ngIf="error" class="rounded-lg bg-red-50 p-3 text-sm text-red-700">{{ error }}</div>
+
+        <!-- Create Task -->
+        <div class="rounded-xl bg-white p-4 shadow">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-medium">Create task</h2>
+                <span class="text-xs text-gray-500" *ngIf="creating">Saving…</span>
+            </div>
+
+            <form #tf="ngForm" class="mt-3 grid gap-3" (ngSubmit)="create(tf)" novalidate>
+                <div>
+                    <input class="w-full rounded-lg border p-2 outline-none focus:ring-2 focus:ring-black/10"
+                        [class.border-red-400]="titleCtrl.invalid && (titleCtrl.touched || tf.submitted)"
+                        placeholder="Title *" name="title" required maxlength="120" [(ngModel)]="title"
+                        #titleCtrl="ngModel" />
+                    <div class="mt-1 text-xs text-red-600"
+                        *ngIf="titleCtrl.invalid && (titleCtrl.touched || tf.submitted)">
+                        <div *ngIf="titleCtrl.errors?.['required']">Title is required.</div>
+                        <div *ngIf="titleCtrl.errors?.['maxlength']">Title is too long (max 120).</div>
+                    </div>
+                </div>
+
+                <input class="w-full rounded-lg border p-2 outline-none focus:ring-2 focus:ring-black/10"
+                    placeholder="Description (optional)" name="description" maxlength="1000"
+                    [(ngModel)]="description" />
+
+                <div class="grid grid-cols-2 gap-3">
+                    <select class="rounded-lg border p-2" [(ngModel)]="category" name="category" required>
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <select class="rounded-lg border p-2" [(ngModel)]="status" name="status" required>
+                        <option value="Todo">Todo</option>
+                        <option value="InProgress">InProgress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+
+                <button class="rounded-lg bg-black px-4 py-2 text-white disabled:opacity-60" type="submit"
+                    [disabled]="creating || tf.invalid">
+                    {{ creating ? 'Creating...' : 'Create' }}
+                </button>
+
+                <p class="text-xs text-gray-500">
+                    Viewer can list tasks but cannot create/delete (403).
+                </p>
+            </form>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="rounded-xl bg-white p-4 shadow">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-medium">Visible tasks</h2>
+                <button class="rounded-lg border bg-white px-3 py-2 text-sm" (click)="refresh()">Refresh</button>
+            </div>
+
+            <div *ngIf="loading" class="mt-3 text-sm text-gray-500">Loading...</div>
+
+            <div *ngIf="!loading && tasks.length === 0" class="mt-3 text-sm text-gray-500">
+                No tasks visible for this user/org.
+            </div>
+
+            <ul class="mt-3 divide-y" *ngIf="tasks.length > 0">
+                <li class="py-3 flex items-start justify-between gap-3" *ngFor="let t of tasks">
+                    <div>
+                        <div class="font-medium">{{ t.title }}</div>
+                        <div class="text-sm text-gray-600" *ngIf="t.description">{{ t.description }}</div>
+                        <div class="mt-1 text-xs text-gray-500">{{ t.category }} • {{ t.status }}</div>
+                    </div>
+
+                    <button class="text-sm text-red-600 disabled:opacity-60" (click)="delete(t.id)"
+                        [disabled]="deletingId === t.id">
+                        {{ deletingId === t.id ? 'Deleting…' : 'Delete' }}
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

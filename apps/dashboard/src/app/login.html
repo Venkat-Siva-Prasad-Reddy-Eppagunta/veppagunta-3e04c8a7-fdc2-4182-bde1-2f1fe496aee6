@@ -1,0 +1,50 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div class="w-full max-w-md rounded-xl bg-white p-6 shadow">
+        <h1 class="text-2xl font-semibold">Sign in</h1>
+
+        <form #f="ngForm" class="mt-6 space-y-4" (ngSubmit)="onSubmit(f)" novalidate>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+
+                <input class="mt-1 w-full rounded-lg border p-2 outline-none focus:ring-2 focus:ring-black/10"
+                    [class.border-red-400]="emailCtrl.invalid && (emailCtrl.touched || f.submitted)" type="email"
+                    name="email" required email [(ngModel)]="email" #emailCtrl="ngModel" placeholder="owner@test.com"
+                    autocomplete="email" />
+
+                <div class="mt-1 text-xs text-red-600" *ngIf="emailCtrl.invalid && (emailCtrl.touched || f.submitted)">
+                    <div *ngIf="emailCtrl.errors?.['required']">Email is required.</div>
+                    <div *ngIf="emailCtrl.errors?.['email']">Enter a valid email.</div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+
+                <input class="mt-1 w-full rounded-lg border p-2 outline-none focus:ring-2 focus:ring-black/10"
+                    [class.border-red-400]="passwordCtrl.invalid && (passwordCtrl.touched || f.submitted)"
+                    type="password" name="password" required minlength="6" [(ngModel)]="password"
+                    #passwordCtrl="ngModel" placeholder="Password123!" autocomplete="current-password" />
+
+                <div class="mt-1 text-xs text-red-600"
+                    *ngIf="passwordCtrl.invalid && (passwordCtrl.touched || f.submitted)">
+                    <div *ngIf="passwordCtrl.errors?.['required']">Password is required.</div>
+                    <div *ngIf="passwordCtrl.errors?.['minlength']">Password must be at least 6 characters.</div>
+                </div>
+            </div>
+
+            <div *ngIf="error" class="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                {{ error }}
+            </div>
+
+            <button class="w-full rounded-lg bg-black px-4 py-2 text-white disabled:opacity-60" type="submit"
+                [disabled]="loading || f.invalid">
+                {{ loading ? 'Signing in...' : 'Login' }}
+            </button>
+
+            <div class="text-xs text-gray-500">
+                owner@test.com / admin@test.com / viewer@test.com<br />
+                Password: Password123!
+            </div>
+        </form>
+    </div>
+</div>
